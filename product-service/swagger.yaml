@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: Preference public API
+  description: Preference public API
+paths:
+  /products:
+    get:
+      description: Get products list
+      summary: Get products list
+      tags:
+        - products
+      operationId: ProductsGet
+      responses:
+        "200":
+          description: Products list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductsResponse"
+  "/products/{productId}":
+    get:
+      description: Get product by id
+      summary: Get product by id
+      tags:
+        - products
+      operationId: ProductsGetById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          description: Products unique identifier
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Product object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Product not found
+servers:
+  - url: https://onka6rul42.execute-api.eu-west-1.amazonaws.com/dev
+components:
+  schemas:
+    ProductsResponse:
+      title: ProductsResponse
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+    ProductBase:
+      title: ProductBase
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - collection
+        - vendor_code
+        - count
+        - manufacture
+        - price
+        - currency
+      properties:
+        id:
+          type: string
+          description: Product id
+          example: 5c73fe34e54969f1d05b7174
+        title:
+          type: string
+          description: Product title
+          example: Nightstand
+        description:
+          type: string
+          description: Product description
+          example: Wite wood nightstand
+        collection:
+          type: string
+          description: Product collection
+          example: Cielo
+        vendor_code:
+          type: string
+          description: Vendor code of product
+          example: 77326
+        count:
+          type: number
+          description: Product available count
+          example: 7
+        manufacture:
+          type: string
+          description: Manufacture of product
+          example: mmc
+        price:
+          type: number
+          description: Product price
+          example: 75
+        currency:
+          type: string
+          description: Currency 
+          example: USD 
+    Product:
+      title: Product
+      allOf:
+        - $ref: '#/components/schemas/ProductBase'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              description: Product unique identifier
+              example: 5c73fe34e54969f1d05b7174
+    BadRequestError:
+      title: Bad Request Error
+      type: object
+      properties:
+        messages:
+          type: array
+          description: List of error messages
+          items:
+            type: string
+          example: [ "\"id\" is required" ]
