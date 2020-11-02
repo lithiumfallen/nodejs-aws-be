@@ -23,7 +23,7 @@ const getProductsById: APIGatewayProxyHandler = async (event, _context) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(product),
+      body: JSON.stringify(product, null, 2),
     };
   } catch(error) {
     return {

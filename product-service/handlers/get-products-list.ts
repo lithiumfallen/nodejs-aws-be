@@ -13,7 +13,7 @@ const getProductsList: APIGatewayProxyHandler = async (event, _context) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify(products),
+    body: JSON.stringify(products, null, 2),
   };
 }
 

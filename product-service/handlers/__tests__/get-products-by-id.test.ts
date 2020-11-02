@@ -10,4 +10,4 @@ test('Test getProductsById function with not extended id', async () => {
   const response = await getProductsById({ pathParameters: { productId: "not extended id" } });
 
   expect(response.statusCode).toBe(404);
-})
+});

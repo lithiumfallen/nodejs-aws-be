@@ -29,6 +29,18 @@ const serverlessConfiguration: Serverless = {
     },
   },
   functions: {
+    getGithubApi: {
+      handler: 'handler.getGithubApi',
+      events: [
+        {
+          http: {
+            method: 'get',
+            path: '/github',
+            cors: true,
+          }
+        }
+      ]
+    },
     getProductsList: {
       handler: 'handler.getProductsList',
       events: [

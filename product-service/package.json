@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "node-fetch": "^2.6.1",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
