@@ -1,0 +1,12 @@
+[
+  {"id": "5c73fe34e54969f1d05b7165", "title": "Bed with drawers", "description": "description", "collection": "cielo", "vendor_code": "77325", "count": 23, "manufacture": "mmc", "price": "294", "currency": "USD"},
+  {"id": "5c73fe34e54969f1d05b7166", "title": "Bed with playground", "description": "description", "collection": "cielo", "vendor_code": "77303", "count": 14, "manufacture": "mmc", "price": "244", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7167", "title": "Wardrobe with two doors", "description": "description", "collection": "cielo", "vendor_code": "77318", "count": 12, "manufacture": "mmc", "price": "355", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7168", "title": "Wardrobe with three doors", "description": "description", "collection": "cielo", "vendor_code": "77319", "count": 8, "manufacture": "mmc", "price": "493", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7169", "title": "Open shelf bookcase narrow", "description": "description", "collection": "cielo", "vendor_code": "77311", "count": 4, "manufacture": "mmc", "price": "170", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7170", "title": "Open shelf bookcase wide", "description": "description", "collection": "cielo", "vendor_code": "77312", "count": 5, "manufacture": "mmc", "price": "206", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7171", "title": "Desk with drawer", "description": "description", "collection": "cielo", "vendor_code": "77327", "count": 26, "manufacture": "mmc", "price": "130", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7172", "title": "Commode", "description": "small 5 drawers", "collection": "cielo", "vendor_code": "77311", "count": 7, "manufacture": "mmc", "price": "143", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7173", "title": "Commode wide", "description": "3 wide drawers and 2 small", "collection": "cielo", "vendor_code": "77333", "count": 16, "manufacture": "mmc", "price": "246", "currency": "USD" },
+  {"id": "5c73fe34e54969f1d05b7174", "title": "Nightstand", "description": "description", "collection": "cielo", "vendor_code": "77326", "count": 8, "manufacture": "mmc", "price": "75", "currency": "USD" }
+]
