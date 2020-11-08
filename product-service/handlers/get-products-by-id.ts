@@ -9,9 +9,11 @@ const getProductsById: APIGatewayProxyHandler = async (event, _context) => {
   console.log('Invoke getProductsById lambda\n');
   console.log('ENVIRONMENT VARIABLES:' + JSON.stringify(process.env, null, 2));
   console.info('EVENT:' + JSON.stringify(event, null, 2));
+
   const dbClient = new Client(generateDbConfig(process));
+  await dbClient.connect()
+
   try {
-    await dbClient.connect()
     const { productId } = event.pathParameters;
     const product = await dbClient.query(selectProductById(productId));
 
@@ -26,7 +28,7 @@ const getProductsById: APIGatewayProxyHandler = async (event, _context) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify(product.rows, null, 2),
+      body: JSON.stringify(product.rows[0], null, 2),
     };
   } catch(error) {
     return {

@@ -9,10 +9,11 @@ const getProductsList: APIGatewayProxyHandler = async (event, _context) => {
   console.log('Invoke getProductsList lambda\n');
   console.log('ENVIRONMENT VARIABLES:' + JSON.stringify(process.env, null, 2));
   console.info('EVENT:' + JSON.stringify(event, null, 2));
+
   const dbClient = new Client(generateDbConfig(process));
+  await dbClient.connect();
 
   try {
-    await dbClient.connect();
     const products = await dbClient.query(selectAllProducts);
 
     return {
