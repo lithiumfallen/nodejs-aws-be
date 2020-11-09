@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import { Pool } from 'pg';
+import { Client } from 'pg';
 import headers from './headers';
 import generateDbConfig from '../db/db-config';
 import { addNewProduct } from '../db/queries';
@@ -37,8 +37,8 @@ const createProducts: APIGatewayProxyHandler = async (event, _context) => {
     }
   } 
 
-  const pgClient = new Pool(generateDbConfig(process));
-  const dbClient = await pgClient.connect();
+  const dbClient = new Client(generateDbConfig(process));
+  await dbClient.connect();
 
   try {
     await dbClient.query('BEGIN');
@@ -59,7 +59,6 @@ const createProducts: APIGatewayProxyHandler = async (event, _context) => {
       body: JSON.stringify(error.message)
     }
   } finally {
-    dbClient.release();
     dbClient.end();
   }
 }

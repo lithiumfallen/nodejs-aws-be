@@ -17,7 +17,7 @@ const getProductsById: APIGatewayProxyHandler = async (event, _context) => {
     const { productId } = event.pathParameters;
     const product = await dbClient.query(selectProductById(productId));
 
-    if (!product && !product.rows && product.rows.length === 0) {
+    if (!product || !product.rows || product.rows.length === 0) {
       return {
         statusCode: 404,
         headers,
