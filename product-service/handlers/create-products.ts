@@ -38,9 +38,9 @@ const createProducts: APIGatewayProxyHandler = async (event, _context) => {
   } 
 
   const dbClient = new Client(generateDbConfig(process));
-  await dbClient.connect();
 
   try {
+    await dbClient.connect();
     await dbClient.query('BEGIN');
     await dbClient.query(addNewProduct(body));
     await dbClient.query('COMMIT');

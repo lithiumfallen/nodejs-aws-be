@@ -11,9 +11,9 @@ const getProductsList: APIGatewayProxyHandler = async (event, _context) => {
   console.info('EVENT:' + JSON.stringify(event, null, 2));
 
   const dbClient = new Client(generateDbConfig(process));
-  await dbClient.connect();
 
   try {
+    await dbClient.connect();
     const products = await dbClient.query(selectAllProducts);
 
     return {
