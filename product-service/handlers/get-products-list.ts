@@ -1,20 +1,25 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import products from '../db/furniture.json';
+import { Client } from 'pg';
+import generateDbConfig from '../db/db-config';
+import { selectAllProductsQuery } from '../db/queries';
+import { logger, generateResponseObject } from './utils';
 
 const getProductsList: APIGatewayProxyHandler = async (event, _context) => {
-  console.log('Invoke getProductsList lambda\n');
-  console.log('ENVIRONMENT VARIABLES:' + JSON.stringify(process.env, null, 2));
-  console.info('EVENT:' + JSON.stringify(event, null, 2));
-  
-  return {
-    statusCode: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-    },
-    body: JSON.stringify(products, null, 2),
-  };
+  logger('getProductsList', event);
+
+  const dbClient = new Client(generateDbConfig(process));
+
+  try {
+    await dbClient.connect();
+    const products = await dbClient.query(selectAllProductsQuery);
+
+    return generateResponseObject(200, products.rows);
+  } catch (error) {
+    return generateResponseObject(500, error.message);
+  } finally {
+    dbClient.end();
+  }
 }
 
 export default getProductsList;

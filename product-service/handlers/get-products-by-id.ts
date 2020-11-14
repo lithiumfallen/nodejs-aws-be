@@ -1,36 +1,34 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import products from '../db/furniture.json';
-
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Credentials': true,
-}
+import { Client } from 'pg';
+import generateDbConfig from '../db/db-config';
+import { selectProductByIdQuery } from '../db/queries';
+import { logger, isUUID, generateResponseObject } from './utils';
 
 const getProductsById: APIGatewayProxyHandler = async (event, _context) => {
+  logger('getProductsById', event);
+
+  const { productId } = event.pathParameters;
+
+  if (!isUUID(productId)) {
+    return generateResponseObject(400, 'Invalid query parametr');
+  }
+
+  const dbClient = new Client(generateDbConfig(process));
+
   try {
-    console.log('Invoke getProductsById lambda\n');
-    console.log('ENVIRONMENT VARIABLES:' + JSON.stringify(process.env, null, 2));
-    console.info('EVENT:' + JSON.stringify(event, null, 2));
+    await dbClient.connect()
+    const product = await dbClient.query(selectProductByIdQuery, [productId]);
 
-    const { productId } = event.pathParameters;
-    const product = products.find(({ id }) => (id === productId));
-  
-    if (!product) {
-      throw new Error(`Product with id: ${productId} not found`);
-    } 
-
-    return {
-      statusCode: 200,
-      headers,
-      body: JSON.stringify(product, null, 2),
-    };
-  } catch(error) {
-    return {
-      statusCode: 404,
-      headers,
-      body: JSON.stringify(error.message),
+    if (product?.rows?.length) {
+      return generateResponseObject(200, product.rows[0]);
+    } else {
+      return generateResponseObject(404, `Product with id = ${productId} not found`);
     }
+  } catch(error) {
+    return generateResponseObject(500, error.message);
+  } finally {
+    dbClient.end();
   }
 }
 
