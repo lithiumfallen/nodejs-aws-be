@@ -1,48 +1,36 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
 import { Client } from 'pg';
-import headers from './headers';
 import generateDbConfig from '../db/db-config';
-import { addNewProduct } from '../db/queries';
 import { Product, ProductSchema } from '../db/models/Product';
+import { insertProductQuery, insertStocQuery } from '../db/queries'
+import { logger, generateResponseObject } from './utils';
 
 const createProducts: APIGatewayProxyHandler = async (event, _context) => {
-  console.log('Invoke createProducts lambda\n');
-  console.log('ENVIRONMENT VARIABLES:' + JSON.stringify(process.env, null, 2));
-  console.info('EVENT:' + JSON.stringify(event, null, 2));
+  logger('createProducts', event);
  
   const body: Product = JSON.parse(event.body);
   const isValid = await ProductSchema.isValid(body);
 
   if (!isValid) {
-    return {
-      statusCode: 400,
-      headers,
-      body: 'Product data is invalid'
-    }
+    return generateResponseObject(400, 'Product data is invalid')
   }
 
   const dbClient = new Client(generateDbConfig(process));
 
   try {
+    const { title, description, price, count } = body;
     await dbClient.connect();
     await dbClient.query('BEGIN');
-    await dbClient.query(addNewProduct(body));
+    const response = await dbClient.query(insertProductQuery, [title, description, price]);
+    await dbClient.query(insertStocQuery, [response.rows[0].id, count]);
     await dbClient.query('COMMIT');
 
-    return {
-      statusCode: 200,
-      headers,
-      body: 'Ok',
-    };
+    return generateResponseObject(200, 'Ok')
   } catch (error) {
     await dbClient.query('ROLLBACK');
 
-    return {
-      statusCode: 500,
-      headers,
-      body: JSON.stringify(error.message)
-    }
+    return generateResponseObject(500, error.message);
   } finally {
     dbClient.end();
   }
