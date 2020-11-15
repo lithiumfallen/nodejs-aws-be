@@ -23,13 +23,24 @@ export const importFileParser = async (event : S3Event) => {
           .on('end', async () => {
             console.log(`File ${record.s3.object.key} read`);
 
-            console.log(`File ${record.s3.object.key} start copy into parsed folder`);
+            console.log(`File ${record.s3.object.key} start copy into /parsed`);
+
             await s3.copyObject({
               Bucket: BUCKET,
               CopySource: BUCKET + '/' + record.s3.object.key,
               Key: record.s3.object.key.replace('uploaded', 'parsed'),
             }).promise();
-            console.log(`File ${record.s3.object.key} copied into parsed`);
+
+            console.log(`File ${record.s3.object.key} copied into /parsed`);
+
+            console.log(`File ${record.s3.object.key} started delete from /uploaded`)
+
+            await s3.deleteObject({
+              Bucket: BUCKET,
+              Key: record.s3.object.key,
+            }).promise();
+
+            console.log(`File ${record.s3.object.key} deleted`)
 
             resolve()
           })
