@@ -8,10 +8,13 @@ export const importProductsFile: APIGatewayProxyHandler = async (event, _context
 
   try {
     const { name } = event.queryStringParameters;
+
+    if(!name) return generateResponseObject(400, 'Inavlid query param');
+
     const path = `uploaded/${name}`;
     const s3 = new AWS.S3({ region: 'eu-west-1' });
     const s3Params = {
-      Bucket: 'node-aws-s3-import',
+      Bucket: process.env.BUCKET,
       Key: path,
       Expires: 60,
       ContentType: 'text/csv',

@@ -30,6 +30,7 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+      BUCKET: 'node-aws-s3-import',
     },
   },
   functions: {
@@ -60,7 +61,7 @@ const serverlessConfiguration: Serverless = {
             event: 's3:ObjectCreated:*',
             rules: [{
               prefix: 'uploaded/',
-              suffix: 'csv'
+              suffix: '.csv'
             }],
             existing: true,
           }
