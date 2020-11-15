@@ -21,6 +21,10 @@ const serverlessConfiguration: Serverless = {
     runtime: 'nodejs12.x',
     region: 'eu-west-1',
     stage: 'dev',
+    iamRoleStatements: [
+      { Effect: 'Allow', Action: 's3:ListBucket', Resource: ['arn:aws:s3:::node-aws-s3-import'] },
+      { Effect: 'Allow', Action: 's3:*', Resource: ['arn:aws:s3:::node-aws-s3-import/*'] },
+    ],
     apiGateway: {
       minimumCompressionSize: 1024,
     },
@@ -47,6 +51,22 @@ const serverlessConfiguration: Serverless = {
         }
       ]
     },
+    importFileParser: {
+      handler: 'handler.importFileParser',
+      events: [
+        {
+          s3: {
+            bucket: 'node-aws-s3-import',
+            event: 's3:ObjectCreated:*',
+            rules: [{
+              prefix: 'uploaded/',
+              suffix: 'csv'
+            }],
+            existing: true,
+          }
+        }
+      ]
+    }
   }
 }
 
