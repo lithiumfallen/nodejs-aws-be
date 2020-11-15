@@ -4,18 +4,24 @@
   "description": "Serverless webpack example using Typescript",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "dependencies": {
     "csv-parser": "^2.3.3",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/preset-typescript": "^7.12.1",
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.12.18",
     "@types/serverless": "^1.72.5",
     "aws-sdk": "^2.792.0",
+    "aws-sdk-mock": "^5.1.0",
+    "babel-jest": "^26.6.3",
     "fork-ts-checker-webpack-plugin": "^3.0.1",
+    "jest": "^26.6.3",
     "serverless-webpack": "^5.2.0",
     "ts-loader": "^5.3.3",
     "ts-node": "^8.10.2",

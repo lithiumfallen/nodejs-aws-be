@@ -18,7 +18,7 @@ export const importFileParser = async (event : S3Event) => {
 
       return new Promise((resolve, reject) => {
         s3Stream.pipe(csv())
-          .on('data', data => console.log(data))
+          .on('data', data => { console.log(data) })
           .on('error', error => reject(new Error(error.message)))
           .on('end', async () => {
             console.log(`File ${record.s3.object.key} read`);

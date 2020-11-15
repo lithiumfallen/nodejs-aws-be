@@ -4,12 +4,12 @@ import 'source-map-support/register';
 import generateResponseObject from './response';
 
 export const importProductsFile: APIGatewayProxyHandler = async (event, _context) => {
-  console.log('importProductFile start', event.queryStringParameters.name)
+  console.log('importProductFile start', event?.queryStringParameters?.name)
 
   try {
-    const { name } = event.queryStringParameters;
+    const name = event?.queryStringParameters?.name;
 
-    if(!name) return generateResponseObject(400, 'Inavlid query param');
+    if (!name) return generateResponseObject(400, 'Inavlid query param');
 
     const path = `uploaded/${name}`;
     const s3 = new AWS.S3({ region: 'eu-west-1' });
