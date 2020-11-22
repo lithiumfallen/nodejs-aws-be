@@ -24,6 +24,7 @@ const serverlessConfiguration: Serverless = {
     iamRoleStatements: [
       { Effect: 'Allow', Action: 's3:ListBucket', Resource: ['arn:aws:s3:::node-aws-s3-import'] },
       { Effect: 'Allow', Action: 's3:*', Resource: ['arn:aws:s3:::node-aws-s3-import/*'] },
+      { Effect: 'Allow', Action: 'sqs:SendMessage', Resource: '${cf:product-service-${self:provider.stage}.SQSQueueArn}'}
     ],
     apiGateway: {
       minimumCompressionSize: 1024,
@@ -31,6 +32,7 @@ const serverlessConfiguration: Serverless = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       BUCKET: 'node-aws-s3-import',
+      SQS_URL: '${cf:product-service-${self:provider.stage}.SQSQueueUrl}'
     },
   },
   functions: {
