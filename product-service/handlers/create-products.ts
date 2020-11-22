@@ -3,7 +3,7 @@ import 'source-map-support/register';
 import { Client } from 'pg';
 import generateDbConfig from '../db/db-config';
 import { Product, ProductSchema } from '../db/models/Product';
-import { insertProductQuery, insertStocQuery } from '../db/queries'
+import { insertProductQuery, insertStockQuery } from '../db/queries'
 import { logger, generateResponseObject } from './utils';
 
 const createProducts: APIGatewayProxyHandler = async (event, _context) => {
@@ -23,7 +23,7 @@ const createProducts: APIGatewayProxyHandler = async (event, _context) => {
     await dbClient.connect();
     await dbClient.query('BEGIN');
     const response = await dbClient.query(insertProductQuery, [title, description, price]);
-    await dbClient.query(insertStocQuery, [response.rows[0].id, count]);
+    await dbClient.query(insertStockQuery, [response.rows[0].id, count]);
     await dbClient.query('COMMIT');
 
     return generateResponseObject(200, 'Ok')

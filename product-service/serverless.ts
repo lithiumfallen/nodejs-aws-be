@@ -71,7 +71,21 @@ const serverlessConfiguration: Serverless = {
         Properties: {
           Endpoint: '${env:MAIN_EMAIL}',
           Protocol: 'email',
-          TopicArn: { Ref: 'SNSTopic' }
+          TopicArn: { Ref: 'SNSTopic' },
+          FilterPolicy: {
+            validationStatus: ["VALID"]
+          }
+        }
+      },
+      SNSSubscriptionWarrning: {
+        Type: 'AWS::SNS::Subscription',
+        Properties: {
+          Endpoint: '${env:SECONDARY_EMAIL}',
+          Protocol: 'email',
+          TopicArn: { Ref: 'SNSTopic' },
+          FilterPolicy: {
+            validationStatus: ['INVALID']
+          }
         }
       }
     },

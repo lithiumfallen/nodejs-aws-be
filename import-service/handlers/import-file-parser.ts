@@ -9,6 +9,7 @@ export const importFileParser = async (event : S3Event) => {
   try {
     const { BUCKET, SQS_URL } = process.env;
     const s3 = new AWS.S3({ region: 'eu-west-1' });
+    const sqs = new AWS.SQS();
 
     await Promise.all(event.Records.map(record => {
       const s3Stream = s3.getObject({
@@ -18,16 +19,13 @@ export const importFileParser = async (event : S3Event) => {
 
       return new Promise((resolve, reject) => {
         s3Stream.pipe(csv())
-          .on('data', data => {
+          .on('data', async data => {
             console.log(data);
-            const sqs = new AWS.SQS();
-            sqs.sendMessage({
+
+            await sqs.sendMessage({
               QueueUrl: SQS_URL,
               MessageBody: JSON.stringify(data),
-            }, (error, data) => {
-              console.log('error: ' + error?.message)
-              console.log('data: ' + JSON.stringify(data, null, 2));
-            })
+            }).promise();
           })
           .on('error', error => reject(new Error(error.message)))
           .on('end', async () => {
