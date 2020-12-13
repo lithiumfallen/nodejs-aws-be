@@ -1,0 +1,7 @@
+# following directories and files is not nedded for container build
+
+node_modules
+test
+
+.prettierrc
+README.md
